@@ -31,11 +31,24 @@ const user = useContext(UserContext)
                 Pokemon list
               </Link>
             </li>
-            <li className="nav-item">
+            {
+              !user 
+              ?
+              <li className="nav-item">
               <Link className="nav-link" to="login">
                 Login
               </Link>
+              </li> 
+              :
+              <li className="nav-item">
+              <Link className="nav-link" to="login">
+                Favorites
+              </Link>
             </li>
+          
+            }
+            
+            
           </ul>
         </div>
       </div>
