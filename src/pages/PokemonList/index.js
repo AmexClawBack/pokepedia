@@ -23,9 +23,18 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
 
       const pokeURLs = [];
 
+      let counter = 10000
       for (let i = itemOffset + 1; i <= endOffset; i++) {
-        pokeURLs.push(`https://pokeapi.co/api/v2/pokemon/${i}`);
-      }
+        if(i > 898) {
+          counter++
+          pokeURLs.push(`https://pokeapi.co/api/v2/pokemon/${counter}`)
+
+        } else {
+        
+          pokeURLs.push(`https://pokeapi.co/api/v2/pokemon/${i}`);
+        }
+      } 
+      
 
       // console.log('urls', pokeURLs)
       currPagePokemon(pokeURLs);
@@ -68,7 +77,7 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
         {currentPokemon &&
           currentPokemon.map((pokemon) => (
             <div className="card poke-card" key={pokemon.id}>
-              <img src={pokemon.sprites.front_default} className="card-img-top" alt="..." />
+              <img src={pokemon.sprites.front_shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default} className="card-img-top" alt="..." />
               <div className="card-body">
                 <h5 className="card-title">{pokemon.name}</h5>
                 <p className="card-text">
