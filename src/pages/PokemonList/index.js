@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import axios from "axios";
+import "./styles.css"
 
 const PokemonList = ({ pokeList, itemsPerPage }) => {
-//   console.log(pokeList);
+  //   console.log(pokeList);
 
   //   const pokemon = pokeList.map((pokemon, i) => <li key={i}>{pokemon.name}</li>);
 
@@ -20,46 +21,66 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
       const endOffset = itemOffset + itemsPerPage;
       console.log(`Loading pokeList from ${itemOffset} to ${endOffset}`);
 
-      const pokeURLs = []
+      const pokeURLs = [];
 
-        for (let i = itemOffset + 1; i <= endOffset; i++) {
-            pokeURLs.push(`https://pokeapi.co/api/v2/pokemon/${i}`)
-        }
+      for (let i = itemOffset + 1; i <= endOffset; i++) {
+        pokeURLs.push(`https://pokeapi.co/api/v2/pokemon/${i}`);
+      }
 
-        // console.log('urls', pokeURLs)
-        currPagePokemon(pokeURLs)
+      // console.log('urls', pokeURLs)
+      currPagePokemon(pokeURLs);
 
-    //   setCurrentPokemon(pokeList.slice(itemOffset, endOffset));
-      setPageCount(Math.ceil(pokeList.length / itemsPerPage));
+      //   setCurrentPokemon(pokeList.slice(itemOffset, endOffset));
+      const length = pokeList.length ? pokeList.length : 1118;
+      setPageCount(Math.ceil(length / itemsPerPage));
     } catch (error) {
       console.log(error);
-    }   
+    }
   }, [itemOffset, itemsPerPage]);
 
-    // Fetch pokeList from another resources.
-    // const endOffset = itemOffset + itemsPerPage;
-    // console.log(`Loading pokeList from ${itemOffset} to ${endOffset}`);
-    // setCurrentPokemon(pokeList.slice(itemOffset, endOffset));
+  // Fetch pokeList from another resources.
+  // const endOffset = itemOffset + itemsPerPage;
+  // console.log(`Loading pokeList from ${itemOffset} to ${endOffset}`);
+  // setCurrentPokemon(pokeList.slice(itemOffset, endOffset));
 
   const currPagePokemon = (pokeURLs) => {
-    
-      try {
-       // axios all() makes all concurrent requests
-       // instead of doing individual req, we can programatically make multiple req
-       // If one of our Promises fails, the entire request fails.
-       axios.all() 
-      } catch (error) {
+    try {
+      // axios all() makes all concurrent requests
+      // instead of doing individual req, we can programatically make multiple req
+      // If one of our Promises fails, the entire request fails.
 
-      }
-   
+      const pokeArr = [];
+      axios.all(
+        pokeURLs.map(async (url) => {
+          const response = await axios.get(url);
+          // console.log(response.data)
+          pokeArr.push(response.data);
+          setCurrentPokemon(pokeArr.flat());
+          // console.log('poke array', pokeArr)
+        })
+      );
+    } catch (error) {}
   };
 
   const Pokemon = () => {
     return (
-      <>
-        {pokeList &&
-          pokeList.map((pokemon) => <div>{/* <h3>{pokemon.name}</h3> */}</div>)}
-      </>
+      <div id='pokemon-container'>
+        {currentPokemon &&
+          currentPokemon.map((pokemon) => (
+            <div className="card poke-card" key={pokemon.id}>
+              <img src={pokemon.sprites.front_default} className="card-img-top" alt="..." />
+              <div className="card-body">
+                <h5 className="card-title">{pokemon.name}</h5>
+                <p className="card-text">
+                Order: {pokemon.id}
+                </p>
+                <a href="#" className="btn btn-primary">
+                  Go somewhere
+                </a>
+              </div>
+            </div>
+          ))}
+      </div>
     );
   };
 
@@ -95,7 +116,7 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
         breakLinkClassName="page-link"
         containerClassName="pagination"
         activeClassName="active"
-        renderOnZeroPageCount={null}
+        // renderOnZeroPageCount={null}
       />
     </div>
   );
