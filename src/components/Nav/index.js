@@ -41,7 +41,7 @@ const user = useContext(UserContext)
               </li> 
               :
               <li className="nav-item">
-              <Link className="nav-link" to="login">
+              <Link className="nav-link" to="favorites">
                 Favorites
               </Link>
             </li>

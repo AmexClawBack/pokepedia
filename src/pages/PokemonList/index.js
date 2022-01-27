@@ -3,7 +3,8 @@ import ReactPaginate from "react-paginate";
 import axios from "axios";
 import "./styles.css"
 
-const PokemonList = ({ pokeList, itemsPerPage }) => {
+// props destructuring
+const PokemonList = ({ pokeList, itemsPerPage, addToFavorites }) => {
   //   console.log(pokeList);
 
   //   const pokemon = pokeList.map((pokemon, i) => <li key={i}>{pokemon.name}</li>);
@@ -83,6 +84,7 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
                 <p className="card-text">
                 Order: {pokemon.id}
                 </p>
+                <button className='btn btn-danger' onClick={() => addToFavorites(pokemon)} >Like</button>
                 <a href="#" className="btn btn-primary">
                   Go somewhere
                 </a>
@@ -102,7 +104,7 @@ const PokemonList = ({ pokeList, itemsPerPage }) => {
     setItemOffset(newOffset);
   };
 
-  console.log("current pokemon", currentPokemon);
+  // console.log("current pokemon", currentPokemon);
 
   return (
     <div>
